@@ -101,3 +101,50 @@ COPY INTO FIRST_DB.PUBLIC.ORDERS_EX (PROFIT,AMOUNT)
           from @MANAGE_DB.external_stages.aws_stage s)
     file_format= (type = csv field_delimiter=',' skip_header=1)
     files=('OrderDetails.csv');
+
+ CREATE OR REPLACE STAGE MANAGE_DB.external_stages.aws_stage_errorex
+    url='s3://bucketsnowflakes4';
+
+ LIST @MANAGE_DB.external_stages.aws_stage_errorex;
+
+CREATE OR REPLACE TABLE FIRST_DB.PUBLIC.ORDERS_EX (
+ORDER_ID VARCHAR(30),
+AMOUNT INT,
+PROFIT INT,
+QUANTITY INT,
+CATEGORY VARCHAR(30),
+SUBCATEGORY VARCHAR(30));
+
+COPY INTO FIRST_DB.PUBLIC.ORDERS_EX
+    FROM @MANAGE_DB.external_stages.aws_stage_errorex
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    files = ('OrderDetails_error.csv')
+    ON_ERROR = 'CONTINUE';
+
+SELECT * FROM FIRST_DB.PUBLIC.ORDERS_EX;  
+
+TRUNCATE TABLE FIRST_DB.PUBLIC.ORDERS_EX;
+
+COPY INTO FIRST_DB.PUBLIC.ORDERS_EX
+    FROM @MANAGE_DB.external_stages.aws_stage_errorex
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    files = ('OrderDetails_error.csv','OrderDetails_error2.csv')
+    ON_ERROR = 'ABORT_STATEMENT';
+
+COPY INTO FIRST_DB.PUBLIC.ORDERS_EX
+    FROM @MANAGE_DB.external_stages.aws_stage_errorex
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    files = ('OrderDetails_error.csv','OrderDetails_error2.csv')
+    ON_ERROR = 'SKIP_FILE';
+
+COPY INTO FIRST_DB.PUBLIC.ORDERS_EX
+    FROM @MANAGE_DB.external_stages.aws_stage_errorex
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    files = ('OrderDetails_error.csv','OrderDetails_error2.csv')
+    ON_ERROR = 'SKIP_FILE_2';     
+
+COPY INTO FIRST_DB.PUBLIC.ORDERS_EX
+    FROM @MANAGE_DB.external_stages.aws_stage_errorex
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    files = ('OrderDetails_error.csv','OrderDetails_error2.csv')
+    ON_ERROR = 'SKIP_FILE_3%'; 
