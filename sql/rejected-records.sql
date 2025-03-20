@@ -108,3 +108,12 @@ COPY INTO COPY_DB.PUBLIC.ORDERS
     file_format= (type = csv field_delimiter=',' skip_header=1)
     pattern='.*Order.*'
     TRUNCATECOLUMNS = true;  -- true -> strings are automatically truncated to the target column lenght, false -> error
+
+---- FORCE ----
+
+COPY INTO COPY_DB.PUBLIC.ORDERS
+    FROM @aws_stage_copy
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    pattern='.*Order.*'
+    FORCE = TRUE; -- means that data will be loaded, even it was loaded before and nothing has changed in the file
+-- false -> the file will be skipped
