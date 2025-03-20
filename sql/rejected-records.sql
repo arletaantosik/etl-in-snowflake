@@ -100,3 +100,11 @@ COPY INTO COPY_DB.PUBLIC.ORDERS
     file_format= (type = csv field_delimiter=',' skip_header=1)
     pattern='.*Order.*'
     ON_ERROR =CONTINUE;
+
+---- TRUNCATECOLUMNS ----
+
+COPY INTO COPY_DB.PUBLIC.ORDERS
+    FROM @aws_stage_copy
+    file_format= (type = csv field_delimiter=',' skip_header=1)
+    pattern='.*Order.*'
+    TRUNCATECOLUMNS = true;  -- true -> strings are automatically truncated to the target column lenght, false -> error
