@@ -21,6 +21,11 @@ $19,
 $20
 FROM @demo_db.public.stage_azure;
 
+CREATE OR REPLACE file format demo_db.public.fileformat_azure
+    type = csv
+    field_delimiter = ','
+    skip_header = 1;
+
 create or replace table happiness (
     country_name varchar,
     regional_indicator varchar,
@@ -45,3 +50,5 @@ create or replace table happiness (
 
 COPY INTO HAPPINESS
 FROM @demo_db.public.stage_azure;
+
+
