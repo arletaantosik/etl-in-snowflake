@@ -1,0 +1,4 @@
+-- use case: development table -> production
+
+ALTER TABLE FIRST_DB.COPIED_SCHEMA.CUSTOMERS
+SWAP WITH FIRST_DB.PUBLIC.CUSTOMERS
