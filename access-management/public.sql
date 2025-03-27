@@ -1,0 +1,4 @@
+-- least privileged role (bottom of hierarchy)
+-- every user is automatically assigned to this role
+-- can own objects which are available to everyone
+-- cant create database (sysadmin has to and then grant ownership)
